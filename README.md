@@ -3,7 +3,6 @@
 ### Trade Crypto across multiple exchanges with open source software you can trust. 
 
 <br>
-<br>
 
 ### **What is Raverte?**
 
