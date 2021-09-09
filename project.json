@@ -1,0 +1,29 @@
+{
+ "name": "raverte",
+ "description": "Enter your project description",
+ "author": {
+  "name": "charlie",
+  "email": "amaise@live.com"
+ },
+ "version": "0.1.0",
+ "binaryname": "raverte",
+ "frontend": {
+  "dir": "frontend",
+  "install": "npm install",
+  "build": "npm run build",
+  "bridge": "src",
+  "serve": "npm run serve"
+ },
+ "tags": "",
+ "WailsVersion": "",
+ "CrossCompile": false,
+ "Platform": "",
+ "Architecture": "",
+ "LdFlags": "",
+ "GoPath": "",
+ "UseFirebug": false,
+ "platforms": [
+  "linux",
+  "darwin"
+ ]
+}
