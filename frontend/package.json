@@ -9,10 +9,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "vue": "^3.0.0-0",
-    "vue-router": "^4.0.0-0",
+    "@popperjs/core": "^2.10.1",
+    "@wailsapp/runtime": "^1.1.1",
+    "bootstrap": "^5.1.1",
     "regenerator-runtime": "^0.13.7",
-    "@wailsapp/runtime": "^1.1.1"
+    "vue": "^3.0.0-0",
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
@@ -28,7 +30,7 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "chai": "^4.2.0",
-    "eslint": "<7.0.0",
+    "eslint": "^6.8.0",
     "eslint-plugin-vue": "^7.0.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.2",
