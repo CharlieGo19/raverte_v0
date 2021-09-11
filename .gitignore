@@ -2,6 +2,7 @@
 build/
 frontend/dist/
 frontend/node_modules/
+*.plist
 
 # local env files
 .env.local
