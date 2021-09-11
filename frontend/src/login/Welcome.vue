@@ -1,14 +1,13 @@
 <template>
     <div id="login-wrapper">
         <div class="container container-mid">
-            <!-- I think the above container is to seperate the two blocks l&r from touching. -->
             <div class="row px-0 justify-content-lg-center h-100">
                 <div class="col-lg-2 container-shadow-red">
                 </div>
                 <div class="col-lg-2 container-shadow-green">
                 </div>
                 <div class="col-lg-4 content-layer">
-                    This is my layer of content.
+                    <LoginForm />
                 </div>
             </div>
         </div>
@@ -16,18 +15,20 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+// TODO: Check if keys set, if not, straight to charts.
+    import { defineComponent } from "@vue/runtime-core"
+    import LoginForm from "@/login/LoginForm.vue"
 
-export default defineComponent({
-    name: "Welcome",
-});
+    export default defineComponent({
+        components: {
+            LoginForm
+        },
+        name: "Welcome",
+    });
 </script>
 
 <style lang="scss" scoped>
     // TODO: Set some breakpoints.
-    body {
-        background-color: red;
-    }
     .login-wrapper {
         height: 100vh;
         background-color: rgb(2, 4, 15);
@@ -61,7 +62,7 @@ export default defineComponent({
         border-radius: 25px;
         position: fixed;
         z-index: 9999;
-        background-color: rgb(2, 4, 15);
+        background-color: rgb(5, 12, 43);
     }
     </style>
 
