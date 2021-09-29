@@ -17,7 +17,7 @@ const (
 	invalidnonce    = "c0019d9a9bed087615030b65"
 	invalidnoncelen = "c0019d9a9bed087615030b"
 	errmsgAuth      = "cipher: message authentication failed"
-	errmsgKeylen    = "invalid key length"
+	errmsgKeylen    = "crypto/aes: invalid key size 13"
 	errmsgNonlen    = "invalid nonce length"
 )
 
@@ -33,9 +33,10 @@ func TestValidEncryptApiKeys(t *testing.T) {
 	ct, err := userdata.EncryptApiKeys([]byte(plaintext), k, n)
 	if err != nil {
 		t.Errorf("Unexpected error: %s\n", err.Error())
-	}
-	if ct != ciphertext {
-		t.Errorf("Ciphertext did not match!\nExpected: % x\nGot: % x", ciphertext, ct)
+	} else {
+		if ct != ciphertext {
+			t.Errorf("Ciphertext did not match!\nExpected: % x\nGot: % x", ciphertext, ct)
+		}
 	}
 }
 

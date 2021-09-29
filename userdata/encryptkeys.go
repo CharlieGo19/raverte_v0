@@ -14,9 +14,6 @@ func EncryptApiKeys(plaintext, key, nonce []byte) (string, error) {
 	if len(nonce) != 12 {
 		return "", errors.New("invalid nonce length")
 	}
-	if len(key) != 16 {
-		return "", errors.New("invalid key length")
-	}
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
