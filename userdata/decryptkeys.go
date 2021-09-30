@@ -16,9 +16,6 @@ func DecryptApiKeys(nonce, ciphertext string, key []byte) ([]byte, error) {
 	if len(n) != 12 {
 		return make([]byte, 0), errors.New("invalid nonce length")
 	}
-	if len(key) != 16 {
-		return make([]byte, 0), errors.New("invalid key length")
-	}
 
 	ct, err := hex.DecodeString(ciphertext)
 	if err != nil {
