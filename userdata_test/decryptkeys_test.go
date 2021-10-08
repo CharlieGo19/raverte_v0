@@ -9,11 +9,11 @@ import (
 func TestValidDecryptApiKeys(t *testing.T) {
 	k, err := hex.DecodeString(key)
 	if err != nil {
-		t.Errorf("Unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	pt, err := userdata.DecryptApiKeys(nonce, ciphertext, k)
 	if err != nil {
-		t.Errorf("Unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	if hex.EncodeToString(pt) != plaintext {
 		t.Errorf("Plaintext did not match!\nExpected: %s\nGot:%s", plaintext, hex.EncodeToString(pt))
@@ -23,61 +23,53 @@ func TestValidDecryptApiKeys(t *testing.T) {
 func TestInvalidKeyDecryptApiKeys(t *testing.T) {
 	k, err := hex.DecodeString(invalidkey)
 	if err != nil {
-		t.Errorf("Unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 
 	_, err = userdata.DecryptApiKeys(nonce, ciphertext, k)
 	if err != nil {
-		if err.Error() != errmsgAuth {
-			t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errmsgAuth, err.Error())
-		}
+		IncorrectErrReturned(err, errmsgAuth, t)
 	} else {
-		t.Errorf("Did not return expected error: %s\n", errmsgAuth)
+		DidNotReturnErrError(errmsgAuth, t)
 	}
 }
 
 func TestInvalidKeyLenDecryptApiKeys(t *testing.T) {
 	k, err := hex.DecodeString(invalidkeylen)
 	if err != nil {
-		t.Errorf("Unxepected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 
 	_, err = userdata.DecryptApiKeys(nonce, ciphertext, k)
 	if err != nil {
-		if err.Error() != errmsgKeylen {
-			t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errmsgKeylen, err.Error())
-		}
+		IncorrectErrReturned(err, errmsgKeylen, t)
 	} else {
-		t.Errorf("Did not return expected error:%s\n", errmsgKeylen)
+		DidNotReturnErrError(errmsgKeylen, t)
 	}
 }
 
 func TestInvalidNonceDecryptApiKeys(t *testing.T) {
 	k, err := hex.DecodeString(key)
 	if err != nil {
-		t.Errorf("Unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	_, err = userdata.DecryptApiKeys(invalidnonce, ciphertext, k)
 	if err != nil {
-		if err.Error() != errmsgAuth {
-			t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errmsgAuth, err.Error())
-		}
+		IncorrectErrReturned(err, errmsgAuth, t)
 	} else {
-		t.Errorf("Did not return expected error: %s\n", errmsgAuth)
+		DidNotReturnErrError(errmsgAuth, t)
 	}
 }
 
 func TestInvalidNonceLenDecryptKeys(t *testing.T) {
 	k, err := hex.DecodeString(key)
 	if err != nil {
-		t.Errorf("Unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	_, err = userdata.DecryptApiKeys(invalidnoncelen, ciphertext, k)
 	if err != nil {
-		if err.Error() != errmsgNonlen {
-			t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errmsgNonlen, err.Error())
-		}
+		IncorrectErrReturned(err, errmsgNonlen, t)
 	} else {
-		t.Errorf("Did not return expected error: %s\n", errmsgNonlen)
+		DidNotReturnErrError(errmsgNonlen, t)
 	}
 }
