@@ -8,6 +8,7 @@ import (
 
 const (
 	password           = "CardiBGreaterThanNicki"
+	invalidpassword    = "dojaispartofthisconversation"
 	invalidpasswordlen = "CardiB"
 	salt               = "5e821054a00b9135cd71dc689e992a3c0ac3e08909ebdc77c034763d7b0076364dc40213fd8f827c5b44e8b3975d674df8b42d9ef9fe85357791a121b9ab52bb27915c2ae35981dc07cb02892fabab3cdbf102eade4fa4576a67be823df3f9c4d6b45c2ddee9dce937769835187f60d0e671eec649bce0e259c428d0532f13c2"
 	errPasswordLen     = "invalid password length"
@@ -19,27 +20,26 @@ var testKey []byte = []byte{124, 228, 9, 216, 168, 13, 96, 149, 155, 22, 3, 6, 1
 func TestInvalidPassword(t *testing.T) {
 	_, _, err := userdata.GenerateKey(invalidpasswordlen, salt, false)
 	if err != nil {
-		if err.Error() != errPasswordLen {
-			t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errPasswordLen, err.Error())
-		}
+		IncorrectErrReturned(err, errPasswordLen, t)
 	} else {
-		t.Errorf("Did not return expected error: %s\n", errPasswordLen)
+		DidNotReturnErrError(errPasswordLen, t)
 	}
 }
 
 func TestCompromisedSalt(t *testing.T) {
 	var badSalt string = salt + "2a"
-
 	_, _, err := userdata.GenerateKey(password, badSalt, false)
-	if err == nil || err.Error() != errSaltLen {
-		t.Errorf("Did not return expected error: %s\n", errSaltLen)
+	if err != nil {
+		IncorrectErrReturned(err, errSaltLen, t)
+	} else {
+		DidNotReturnErrError(errSaltLen, t)
 	}
 }
 
 func TestNewGenerateKey(t *testing.T) {
 	s, k, err := userdata.GenerateKey(password, "", true)
 	if err != nil {
-		t.Errorf("Got unexpected error: %s\n", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	if len(s) != 256 {
 		t.Errorf("Salt is not long enough, got: %d, expected: 256\n", len(salt))
@@ -52,7 +52,7 @@ func TestNewGenerateKey(t *testing.T) {
 func TestExistingGenerateKey(t *testing.T) {
 	s, key, err := userdata.GenerateKey(password, salt, false)
 	if err != nil {
-		t.Errorf("Got unexpected error %s", err.Error())
+		UnexpectedErrError(err.Error(), t)
 	}
 	if s != salt {
 		t.Errorf("Bad salt:\nExpected: %s\nGot: %s\n", salt, s)
@@ -60,4 +60,18 @@ func TestExistingGenerateKey(t *testing.T) {
 	if !bytes.Equal(testKey, key) {
 		t.Errorf("Bad key:\nExpected: % x\nGot: % x\n", testKey, key)
 	}
+}
+
+func IncorrectErrReturned(err error, errmsg string, t *testing.T) {
+	if err.Error() != errmsg {
+		t.Errorf("Did not get expected error.\nExpected: %s\nGot: %s\n", errmsg, err.Error())
+	}
+}
+
+func DidNotReturnErrError(errmsg string, t *testing.T) {
+	t.Errorf("Did not return expected error: %s\n", errPasswordLen)
+}
+
+func UnexpectedErrError(errmsg string, t *testing.T) {
+	t.Errorf("Got unexpected error: %s", errmsg)
 }
