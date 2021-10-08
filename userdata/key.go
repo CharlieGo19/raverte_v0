@@ -17,7 +17,10 @@ const (
 )
 
 // Generates key, requires password length of at least 8 characters, if newDoc is true, you can pass an empty string for userSalt.
+//
 // Returns encoded salt, key and an error.
+//
+// Returns error if salt or password length do not meet requirements.
 func GenerateKey(password, userSalt string, newDoc bool) (string, []byte, error) {
 	var salt []byte
 
