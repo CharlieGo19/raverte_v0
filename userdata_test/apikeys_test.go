@@ -50,7 +50,7 @@ func TestKeyAndSecretDoesNotExistReturnApiKeyAndSecret(t *testing.T) {
 }
 func TestUnlockKeys(t *testing.T) {
 	// Test the integrity of unlockKeys unlock KNOWNKEYSTORE compare exchange and apikey &  secret
-	testKeystoreSetup := KeystoreConditions(t, "TestUnlockKeys")
+	testKeystoreSetup := KeystoreConditions("TestUnlockKeys", t)
 	defer testKeystoreSetup()
 
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
@@ -69,7 +69,7 @@ func TestUnlockKeys(t *testing.T) {
 }
 
 func TestRaverteAssetDoesNotExistUnlockKeys(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "")
+	testKeystoreSetup := KeystoreConditions("", t)
 	defer testKeystoreSetup()
 
 	keystore, err := userdata.GetRaverteAsset(appdata.KEYSTORE)
@@ -90,7 +90,7 @@ func TestRaverteAssetDoesNotExistUnlockKeys(t *testing.T) {
 }
 
 func TestRaverteAssetBadPermissionsUnlockKeys(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "TestRaverteAssetBadPermissionsUnlockKeys")
+	testKeystoreSetup := KeystoreConditions("TestRaverteAssetBadPermissionsUnlockKeys", t)
 	defer testKeystoreSetup()
 
 	keystore, err := userdata.GetRaverteAsset(appdata.KEYSTORE)
@@ -111,7 +111,7 @@ func TestRaverteAssetBadPermissionsUnlockKeys(t *testing.T) {
 }
 
 func TestCompromisedKeystoreUnlockKeys(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "TestCompromisedKeystoreUnlockKeys")
+	testKeystoreSetup := KeystoreConditions("TestCompromisedKeystoreUnlockKeys", t)
 	defer testKeystoreSetup()
 
 	keystore, err := userdata.GetRaverteAsset(appdata.KEYSTORE)
@@ -136,7 +136,7 @@ func TestCompromisedKeystoreUnlockKeys(t *testing.T) {
 }
 
 func TestInvalidPasswordUnlockKeys(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "TestUnlockKeys") // use expected conditions, as we're testing password capture.
+	testKeystoreSetup := KeystoreConditions("TestUnlockKeys", t) // use expected conditions, as we're testing password capture.
 	defer testKeystoreSetup()
 
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
@@ -151,7 +151,7 @@ func TestInvalidPasswordUnlockKeys(t *testing.T) {
 }
 
 func TestAddApiKeyAndSecret(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "TestUnlockKeys") // use expected conditions.
+	testKeystoreSetup := KeystoreConditions("TestUnlockKeys", t) // use expected conditions.
 	defer testKeystoreSetup()
 
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
@@ -184,7 +184,7 @@ func TestAddApiKeyAndSecret(t *testing.T) {
 }
 
 func TestNewKeystoreAddApiKeyAndSecret(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "") // We do not want a keystore.
+	testKeystoreSetup := KeystoreConditions("", t) // We do not want a keystore.
 	defer testKeystoreSetup()
 
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
@@ -233,7 +233,7 @@ func TestInvalidExchangeAddApiKeyAndSecret(t *testing.T) {
 }
 
 func TestRemoveApiKeyAndSecret(t *testing.T) {
-	testKeystoreSetup := KeystoreConditions(t, "TestRemoveApiKeyAndSecret")
+	testKeystoreSetup := KeystoreConditions("TestRemoveApiKeyAndSecret", t)
 	defer testKeystoreSetup()
 
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
@@ -243,9 +243,6 @@ func TestRemoveApiKeyAndSecret(t *testing.T) {
 	if err != nil {
 		UnexpectedErrError(err.Error(), t)
 		return
-	}
-	for k, _ := range apiKeyRing.Keys {
-		fmt.Println(k)
 	}
 	err = apiKeyRing.RemoveApiKeyAndSecret(exchangeThree, password, profile)
 	if err != nil {
@@ -291,7 +288,7 @@ func TestNoKeyFoundRemoveApiKeyAndSecret(t *testing.T) {
 }
 
 // Write keystore conditions as per test requirements.
-func KeystoreConditions(t *testing.T, testType string) (substitute func()) {
+func KeystoreConditions(testType string, t *testing.T) (substitute func()) {
 	// Revisit this backup required lark.
 	var backupRequired bool = false
 	keystore, err := userdata.GetRaverteAsset(appdata.KEYSTORE)
@@ -308,11 +305,11 @@ func KeystoreConditions(t *testing.T, testType string) (substitute func()) {
 	switch testType {
 	case "TestUnlockKeys":
 		if _, err := os.Create(keystore); err != nil {
-			t.Errorf(err.Error())
+			t.Error(err.Error())
 		} else {
 			var knownKeystoreData string = keystoreNonce + " " + salt + " " + keystoreOneExchangeCiphertext
 			if err = os.WriteFile(keystore, []byte(knownKeystoreData), 0); err != nil {
-				t.Errorf(err.Error())
+				t.Error(err.Error())
 			}
 		}
 		if err := os.Chmod(keystore, 0600); err != nil {
@@ -320,11 +317,11 @@ func KeystoreConditions(t *testing.T, testType string) (substitute func()) {
 		}
 	case "TestRaverteAssetBadPermissionsUnlockKeys":
 		if _, err := os.Create(keystore); err != nil {
-			t.Errorf(err.Error())
+			t.Error(err.Error())
 		} else {
 			var knownKeystoreData string = keystoreNonce + " " + salt + " " + keystoreOneExchangeCiphertext
 			if err = os.WriteFile(keystore, []byte(knownKeystoreData), 0); err != nil {
-				t.Errorf(err.Error())
+				t.Error(err.Error())
 			}
 		}
 		if err := os.Chmod(keystore, 0000); err != nil {
@@ -332,11 +329,11 @@ func KeystoreConditions(t *testing.T, testType string) (substitute func()) {
 		}
 	case "TestCompromisedKeystoreUnlockKeys":
 		if _, err := os.Create(keystore); err != nil {
-			t.Errorf(err.Error())
+			t.Error(err.Error())
 		} else {
 			var knownKeystoreData string = keystoreNonce + " " + salt
 			if err = os.WriteFile(keystore, []byte(knownKeystoreData), 0); err != nil {
-				t.Errorf(err.Error())
+				t.Error(err.Error())
 			}
 		}
 		if err := os.Chmod(keystore, 0600); err != nil {
@@ -344,11 +341,11 @@ func KeystoreConditions(t *testing.T, testType string) (substitute func()) {
 		}
 	case "TestRemoveApiKeyAndSecret":
 		if _, err := os.Create(keystore); err != nil {
-			t.Errorf(err.Error())
+			t.Error(err.Error())
 		} else {
 			var knownKeystoreData string = keystoreNonce + " " + salt + " " + keystoreTwoExchangeCiphertext
 			if err = os.WriteFile(keystore, []byte(knownKeystoreData), 0); err != nil {
-				t.Errorf(err.Error())
+				t.Error(err.Error())
 			}
 			if err := os.Chmod(keystore, 0600); err != nil {
 				t.Errorf("couldn't set permissions for %s", keystore)
