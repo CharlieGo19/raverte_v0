@@ -52,17 +52,17 @@ func GetRaverteAsset(asset string) (string, error) {
 
 // Checks if Raverte asset exists and has permissions defined on creation.
 //
-// Returns true if folder/file exists and permissions of afore mentioned are 0600.
-func checkRaverteAsset(path string) bool {
+// Returns error if folder/file does not exists and permissions of afore mentioned are not 0600.
+func checkRaverteAsset(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return false
+		return errors.New("file does not exist")
 	}
 	if info, err := os.Stat(path); err != nil {
-		return false
+		return errors.New("could not find file")
 	} else if info.Mode().Perm() != 0600 {
-		return false
+		return errors.New("incorrect permissions")
 	}
-	return true
+	return nil
 }
 
 // Creates and configures Raverte assets, permissions allow only user to read and write.

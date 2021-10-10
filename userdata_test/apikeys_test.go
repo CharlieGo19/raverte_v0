@@ -80,7 +80,7 @@ func TestRaverteAssetDoesNotExistUnlockKeys(t *testing.T) {
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
 	var profile userdata.Profile = userdata.Profile{Keystore: true}
 
-	var expectedErrMsg string = fmt.Sprintf("ensure that %s exists and/or has appropriate permissions", keystore)
+	var expectedErrMsg string = fmt.Sprintf("file does not exist: %s", keystore)
 	err = apiKeyRing.UnlockKeys(password, profile)
 	if err != nil {
 		IncorrectErrReturned(err, expectedErrMsg, t)
@@ -101,7 +101,7 @@ func TestRaverteAssetBadPermissionsUnlockKeys(t *testing.T) {
 	var apiKeyRing userdata.ApiKeyRing = userdata.ApiKeyRing{}
 	var profile userdata.Profile = userdata.Profile{Keystore: true}
 
-	var expectedErrMsg string = fmt.Sprintf("ensure that %s exists and/or has appropriate permissions", keystore)
+	var expectedErrMsg string = fmt.Sprintf("incorrect permissions: %s", keystore)
 	err = apiKeyRing.UnlockKeys(password, profile)
 	if err != nil {
 		IncorrectErrReturned(err, expectedErrMsg, t)

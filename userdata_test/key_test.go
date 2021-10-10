@@ -69,7 +69,7 @@ func IncorrectErrReturned(err error, errmsg string, t *testing.T) {
 }
 
 func DidNotReturnErrError(errmsg string, t *testing.T) {
-	t.Errorf("Did not return expected error: %s\n", errPasswordLen)
+	t.Errorf("Did not return expected error: %s\n", errmsg)
 }
 
 func UnexpectedErrError(errmsg string, t *testing.T) {

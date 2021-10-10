@@ -126,9 +126,9 @@ func (a *ApiKeyRing) UnlockKeys(password string, profile Profile) error {
 		return err
 	}
 
-	if ok := checkRaverteAsset(keyPath); !ok {
+	if err := checkRaverteAsset(keyPath); err != nil {
 		// check keystore exists and permissions are appropriate.
-		return fmt.Errorf("ensure that %s exists and/or has appropriate permissions", keyPath)
+		return fmt.Errorf("%s: %s", err.Error(), keyPath)
 	}
 
 	keyData, err := os.ReadFile(keyPath)
