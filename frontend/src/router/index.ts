@@ -1,9 +1,21 @@
 import { createRouter, createMemoryHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
+import Welcome from "../login/Welcome.vue"
+import MainStage from "../mainstage/MainStage.vue"
+
+
 
 const routes: Array<RouteRecordRaw> = [
-
+    {
+        path: "/",
+        name: "welcome",
+        component:  Welcome
+        
+    },
+    {
+      path: "/mainstage",
+      name: "mainstage",
+      component: MainStage
+    }
 ]
 
 const router = createRouter({
@@ -12,3 +24,4 @@ const router = createRouter({
 })
 
 export default router
+
