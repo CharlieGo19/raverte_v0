@@ -3,6 +3,7 @@ package userdata
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"raverte/appdata"
 )
@@ -10,6 +11,10 @@ import (
 type Profile struct {
 	Name     string `json:"name"`
 	Keystore bool   `json:"keystore"`
+}
+
+func (p *Profile) ReturnSelf() *Profile {
+	return p
 }
 
 // Sets default values for a fresh Raverte installation.
@@ -37,6 +42,27 @@ func (p *Profile) InitialiseProfile() error {
 	return nil
 }
 
+func (p *Profile) LoadProfile() error {
+	filePath, err := GetRaverteAsset(appdata.PROFILE)
+	if err != nil {
+		return err
+	}
+
+	if err = checkRaverteAsset(filePath); err != nil {
+		return err
+	}
+
+	readData, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("error reading from profile: %s", err.Error())
+	}
+
+	if err = json.Unmarshal(readData, p); err != nil {
+		return fmt.Errorf("unable to parse data from profile: %s", err.Error())
+	}
+	return nil
+}
+
 // Sets keystore value and commits to profile.json
 //
 // Returns error if: invalid profile(does not exist/permissions have been changed) or is unable to write to profile.json.
@@ -52,6 +78,7 @@ func (p *Profile) UpdateKeystore(value bool) error {
 
 // Sets default values of profile.json
 func (p *Profile) setDefaultValues() {
+	p.Name = "Trader J"
 	p.Keystore = false
 }
 
@@ -61,7 +88,6 @@ func (p *Profile) setDefaultValues() {
 func (p *Profile) writeProfile() error {
 	profilePath, err := GetRaverteAsset(appdata.PROFILE)
 	if err != nil {
-		// TODO: Pass this error up. For user to resolve.
 		return err
 	}
 

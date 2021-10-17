@@ -1,21 +1,23 @@
 <template>
-    <div id="login-wrapper">
-        <div class="container container-mid">
-            <div class="row px-0 justify-content-lg-center h-100">
-                <div class="col-lg-2 container-shadow-red">
-                </div>
-                <div class="col-lg-2 container-shadow-green">
-                </div>
-                <div class="col-lg-4 content-layer">
-                    <LoginForm />
+    <div v-if="displayLogin">
+        <div id="login-wrapper">
+            <div class="container container-mid">
+                <div class="row px-0 justify-content-lg-center h-100">
+                    <div class="col-lg-2 container-shadow-red">
+                    </div>
+                    <div class="col-lg-2 container-shadow-green">
+                    </div>
+                    <div class="col-lg-4 content-layer">
+                        <LoginForm />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- TODO: Add powered by WAILS -->
 </template>
 
 <script>
-// TODO: Check if keys set, if not, straight to charts.
     import { defineComponent } from "@vue/runtime-core"
     import LoginForm from "@/login/LoginForm.vue"
 
@@ -24,6 +26,27 @@
             LoginForm
         },
         name: "Welcome",
+        data() {
+            return {
+                displayLogin: false
+            }
+        },
+        mounted() {
+            window.backend.Raverte.StartUp().then(() => {
+                window.backend.Raverte.GetChartOnlyMode().then((value) => {
+                    if (!value) {
+                        this.displayLogin= true;
+                    }else{
+                        this.$router.push(
+                            {
+                                name: "mainstage"
+                            }
+                        );
+                    }
+                });
+            }).catch(err => console.log(err)); // TODO: Display this to the user -> start err reporting mechanism onAppStart.
+          
+        }
     });
 </script>
 

@@ -93,7 +93,6 @@ func (a *ApiKeyRing) RemoveApiKeyAndSecret(exchange, password string, profile Pr
 
 	keyPath, err := GetRaverteAsset(appdata.KEYSTORE)
 	if err != nil {
-		// TODO: Pass this error up. For user to resolve.
 		return err
 	}
 
@@ -122,7 +121,6 @@ func (a *ApiKeyRing) RemoveApiKeyAndSecret(exchange, password string, profile Pr
 func (a *ApiKeyRing) UnlockKeys(password string, profile Profile) error {
 	keyPath, err := GetRaverteAsset(appdata.KEYSTORE)
 	if err != nil {
-		// TODO: Pass this error up. For the user to resolve.
 		return err
 	}
 
@@ -177,7 +175,6 @@ func (a *ApiKeyRing) UnlockKeys(password string, profile Profile) error {
 func (a *ApiKeyRing) writeKeysAndSecrets(password string, profile Profile) error {
 	keyPath, err := GetRaverteAsset(appdata.KEYSTORE)
 	if err != nil {
-		// TODO: Pass this error up. For user to resolve.
 		return err
 	}
 
